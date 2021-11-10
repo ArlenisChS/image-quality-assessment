@@ -1,0 +1,62 @@
+#!/bin/bash
+set -e
+
+# parse arguments
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+    --docker-image)
+    DOCKER_IMAGE="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --base-model-name)
+    BASE_MODEL_NAME="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --weights-file)
+    WEIGHTS_FILE="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --n-classes)
+    N_CLASSES="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --image-json)
+    IMAGE_JSON="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --image-dir)
+    IMAGE_DIR="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    *)    # unknown option
+    POSITIONAL+=("$1") # save it in an array for later
+    shift # past argument
+    ;;
+esac
+done
+
+# create results dir
+TIMESTAMP=$(date +%Y_%m_%d_%H_%M_%S)
+RESULTS_DIR=results/$TIMESTAMP
+mkdir -p $RESULTS_DIR
+
+# run evaluate
+DOCKER_RUN="docker run
+  --entrypoint entrypoints/entrypoint.evaluate.cpu.sh \
+  -v "$IMAGE_JSON":/src/image_json.json
+  -v "$IMAGE_DIR":/src/images
+  -v "$WEIGHTS_FILE":/src/weights.hdf5
+  -v "$(pwd)/$RESULTS_DIR":/src/$RESULTS_DIR
+  $DOCKER_IMAGE $BASE_MODEL_NAME /src/weights.hdf5 $N_CLASSES /src/image_json.json /src/images /src/$RESULTS_DIR"
+
+eval $DOCKER_RUN

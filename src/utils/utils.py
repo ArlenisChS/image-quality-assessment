@@ -1,4 +1,3 @@
-
 import os
 import json
 import tensorflow as tf
@@ -44,9 +43,9 @@ def normalize_labels(labels):
     return labels_np / labels_np.sum()
 
 
-def calc_mean_score(score_dist):
+def calc_mean_score(score_dist, n_classes=10):
     score_dist = normalize_labels(score_dist)
-    return (score_dist*np.arange(1, 11)).sum()
+    return (score_dist*np.arange(1, n_classes+1)).sum()
 
 
 def ensure_dir_exists(dir):
