@@ -47,7 +47,7 @@ done
 
 # create results dir
 TIMESTAMP=$(date +%Y_%m_%d_%H_%M_%S)
-RESULTS_DIR=results/$TIMESTAMP
+RESULTS_DIR=results/evaluate/$TIMESTAMP
 mkdir -p $RESULTS_DIR
 
 # run evaluate
