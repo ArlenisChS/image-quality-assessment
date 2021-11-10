@@ -109,6 +109,7 @@ venv.bak/
 .idea/
 .pyre
 train_jobs
+results
 _medium
 _readme/graphs.ipynb
 mkdocs/docs/_readme/

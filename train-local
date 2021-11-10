@@ -23,6 +23,11 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    --weights-dir)
+    WEIGHTS_DIR="$2"
+    shift # past argument
+    shift # past value
+    ;;
     *)    # unknown option
     POSITIONAL+=("$1") # save it in an array for later
     shift # past argument
@@ -46,6 +51,7 @@ cp $SAMPLES_FILE $TRAIN_JOB_DIR/samples.json
 DOCKER_RUN="docker run -d
   -v $IMAGE_DIR:/src/images
   -v "$(pwd)/$TRAIN_JOB_DIR":/src/$TRAIN_JOB_DIR
+  -v "$(pwd)/$WEIGHTS_DIR":/src/weights
   -e TRAIN_JOB_DIR=$TRAIN_JOB_DIR
   $docker_image"
 
